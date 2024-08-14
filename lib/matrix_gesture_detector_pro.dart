@@ -70,7 +70,7 @@ class MatrixGestureDetector extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _MatrixGestureDetectorState createState() => _MatrixGestureDetectorState();
+  MatrixGestureDetectorState createState() => MatrixGestureDetectorState();
 
   ///
   /// Compose the matrix from translation, scale and rotation matrices - you can
@@ -81,7 +81,6 @@ class MatrixGestureDetector extends StatefulWidget {
   ///
   static Matrix4 compose(Matrix4 matrix, Matrix4? translationMatrix,
       Matrix4? scaleMatrix, Matrix4? rotationMatrix) {
-    if (matrix == null) matrix = Matrix4.identity();
     if (translationMatrix != null) matrix = translationMatrix * matrix;
     if (scaleMatrix != null) matrix = scaleMatrix * matrix;
     if (rotationMatrix != null) matrix = rotationMatrix * matrix;
@@ -102,7 +101,7 @@ class MatrixGestureDetector extends StatefulWidget {
   }
 }
 
-class _MatrixGestureDetectorState extends State<MatrixGestureDetector> {
+class MatrixGestureDetectorState extends State<MatrixGestureDetector> {
   Matrix4 translationDeltaMatrix = Matrix4.identity();
   Matrix4 scaleDeltaMatrix = Matrix4.identity();
   Matrix4 rotationDeltaMatrix = Matrix4.identity();
