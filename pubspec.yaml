@@ -1,7 +1,7 @@
-name: advance_matrix_gesture_detector_pro
+name: advance_matrix_gesture_detector
 description: Advance gesture detector for matrix transformation in Flutter.
 version: 1.0.0
-homepage: https://github.com/zhaolongs/advance_matrix_gesture_detector_pro.git
+homepage: https://github.com/zhaolongs/advance_matrix_gesture_detector.git
 
 environment:
   sdk: '>=2.18.2 <3.0.0'
