@@ -8,7 +8,8 @@ typedef MatrixGestureDetectorCallback = void Function(
     Matrix4 matrix,
     Matrix4 translationDeltaMatrix,
     Matrix4 scaleDeltaMatrix,
-    Matrix4 rotationDeltaMatrix);
+    Matrix4 rotationDeltaMatrix,
+    Offset focalPointDelta);
 
 /// [MatrixGestureDetector] detects translation, scale and rotation gestures
 /// and combines them into [Matrix4] object that can be used by [Transform] widget
@@ -20,6 +21,7 @@ class MatrixGestureDetector extends StatefulWidget {
   /// [Matrix4] change notification callback
   ///
   final MatrixGestureDetectorCallback onMatrixUpdate;
+  final VoidCallback? onMatrixEnd;
 
   /// The [child] contained by this detector.
   ///
@@ -64,6 +66,7 @@ class MatrixGestureDetector extends StatefulWidget {
     this.shouldRotate = true,
     this.clipChild = true,
     this.focalPointAlignment,
+    this.onMatrixEnd,
   }) : super(key: key);
 
   @override
@@ -76,7 +79,7 @@ class MatrixGestureDetector extends StatefulWidget {
   /// If [matrix] is not null the result of the composing will be concatenated
   /// to that [matrix], otherwise the identity matrix will be used.
   ///
-  static Matrix4  compose(Matrix4 matrix, Matrix4? translationMatrix,
+  static Matrix4 compose(Matrix4 matrix, Matrix4? translationMatrix,
       Matrix4? scaleMatrix, Matrix4? rotationMatrix) {
     if (matrix == null) matrix = Matrix4.identity();
     if (translationMatrix != null) matrix = translationMatrix * matrix;
@@ -112,6 +115,9 @@ class _MatrixGestureDetectorState extends State<MatrixGestureDetector> {
     return GestureDetector(
       onScaleStart: onScaleStart,
       onScaleUpdate: onScaleUpdate,
+      onScaleEnd: (details) {
+        widget.onMatrixEnd != null ? widget.onMatrixEnd!() : null;
+      },
       child: child,
     );
   }
@@ -176,7 +182,12 @@ class _MatrixGestureDetectorState extends State<MatrixGestureDetector> {
     }
 
     widget.onMatrixUpdate(
-        matrix, translationDeltaMatrix, scaleDeltaMatrix, rotationDeltaMatrix);
+      matrix,
+      translationDeltaMatrix,
+      scaleDeltaMatrix,
+      rotationDeltaMatrix,
+      details.focalPointDelta,
+    );
   }
 
   Matrix4 _translate(Offset translation) {
